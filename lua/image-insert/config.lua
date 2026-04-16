@@ -20,7 +20,7 @@ M.setup = function(opts)
 end
 
 ---@param key string
----@param opts? table
+---@param opts? table The opts table should override the default options if provided
 ---@return any
 M.get_opt = function(key, opts)
   if opts and opts[key] ~= nil then

@@ -4,13 +4,14 @@ local fs = require("image-insert.fs")
 local M = {}
 
 ---@param file_path string
+---@param opts? table
 ---@return boolean
-M.insert_markup = function(file_path)
+M.insert_markup = function(file_path, opts)
   local file_name = vim.fn.fnamemodify(file_path, ":t:r")
   local current_dir = vim.fn.expand("%:p:h")
   local relative_path = fs.relpath(file_path, current_dir)
 
-  local template = config.get_opt("template")
+  local template = config.get_opt("template", opts)
   if not template then
     return false
   end

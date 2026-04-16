@@ -10,7 +10,8 @@ M.setup = function(opts)
   config.setup(opts)
 end
 
-M.insert_image = function()
+---@param opts? table
+M.insert_image = function(opts)
   if not clipboard.get_clip_cmd() then
     util.error("Could not find a supported clipboard tool.")
     return
@@ -21,7 +22,7 @@ M.insert_image = function()
     return
   end
 
-  local file_path = fs.get_file_path()
+  local file_path = fs.get_file_path(opts)
   if not file_path then
     util.info("Image insertion cancelled.")
     return
@@ -33,12 +34,12 @@ M.insert_image = function()
     return
   end
 
-  if not clipboard.save_image(file_path) then
+  if not clipboard.save_image(file_path, opts) then
     util.error("Could not save image to: " .. file_path)
     return
   end
 
-  if not markup.insert_markup(file_path) then
+  if not markup.insert_markup(file_path, opts) then
     util.error("Could not insert markup.")
     return
   end

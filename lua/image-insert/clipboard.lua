@@ -49,14 +49,15 @@ M.content_is_image = function()
 end
 
 ---@param file_path string
+---@param opts? table
 ---@return boolean
-M.save_image = function(file_path)
+M.save_image = function(file_path, opts)
   local cmd = M.get_clip_cmd()
   if not cmd then
     return false
   end
 
-  local process_cmd = config.get_opt("process_cmd")
+  local process_cmd = config.get_opt("process_cmd", opts)
   if process_cmd ~= "" then
     process_cmd = "| " .. process_cmd .. " "
   end

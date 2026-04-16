@@ -64,10 +64,11 @@ M.mkdirp = function(dir)
   return vim.loop.fs_mkdir(path, 493) -- 0755
 end
 
+---@param opts? table
 ---@return string | nil
-M.get_file_path = function()
-  local dir_path = config.get_opt("dir_path")
-  if config.get_opt("relative_to_current_file") then
+M.get_file_path = function(opts)
+  local dir_path = config.get_opt("dir_path", opts)
+  if config.get_opt("relative_to_current_file", opts) then
     local current_file_path = vim.fn.expand("%:.:h")
     if current_file_path ~= "." and current_file_path ~= "" then
       dir_path = current_file_path .. M.sep .. dir_path
@@ -75,11 +76,11 @@ M.get_file_path = function()
   end
   dir_path = M.normalize_path(dir_path)
 
-  local file_name = os.date(config.get_opt("file_name"))
-  local extension = config.get_opt("extension")
+  local file_name = os.date(config.get_opt("file_name", opts))
+  local extension = config.get_opt("extension", opts)
 
   local full_path
-  if config.get_opt("prompt_for_file_name") then
+  if config.get_opt("prompt_for_file_name", opts) then
     local input = vim.fn.input("File name: ", file_name)
     if input == "" then
       return nil
