@@ -16,7 +16,10 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
 
 ```lua
 {
-  "zexili/image-insert.nvim",
+  "Jacky-Lzx/image-insert.nvim",
+  keys = {
+    { "<leader>ip", "<cmd>ImageInsert<cr>", desc = "Insert image from clipboard" },
+  },
   opts = {
     dir_path = "img",
     file_name = "%Y-%m-%d-%H-%M-%S",
@@ -24,9 +27,6 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
     relative_to_current_file = true,
     prompt_for_file_name = true,
     template = "![$FILE_NAME]($FILE_PATH)",
-  },
-  keys = {
-    { "<leader>ip", "<cmd>ImageInsert<cr>", desc = "Insert image from clipboard" },
   },
 }
 ```
@@ -40,6 +40,7 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
 | `extension`                | `"png"`                       | Default image extension.                  |
 | `relative_to_current_file` | `true`                        | Save images relative to the current file. |
 | `prompt_for_file_name`     | `true`                        | Prompt for a file name before saving.     |
+| `process_cmd`              | `""`                          | Pre-process command for copied images.    |
 | `template`                 | `"![$FILE_NAME]($FILE_PATH)"` | Markup template to insert.                |
 
 ## Usage
@@ -49,3 +50,7 @@ Run `:ImageInsert` to insert an image from your clipboard.
 ## Acknowledgments
 
 This plugin is inspired by [img-clip.nvim](https://github.com/HakonHarnes/img-clip.nvim).
+
+## Milestones
+
+- [x] Implement `process_cmd` config to pre-process inserted images

@@ -1,4 +1,5 @@
 local util = require("image-insert.util")
+local config = require("image-insert.config")
 
 local M = {}
 
@@ -23,7 +24,9 @@ end
 ---@return boolean
 M.content_is_image = function()
   local cmd = M.get_clip_cmd()
-  if not cmd then return false end
+  if not cmd then
+    return false
+  end
 
   if cmd == "xclip" then
     local output = util.execute("xclip -selection clipboard -t TARGETS -o", true)
@@ -38,10 +41,8 @@ M.content_is_image = function()
     local _, exit_code = util.execute("pngpaste -", true)
     return exit_code == 0
   elseif cmd == "powershell.exe" then
-    local output = util.execute(
-      "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.Clipboard]::GetImage()",
-      true
-    )
+    local output =
+      util.execute("Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.Clipboard]::GetImage()", true)
     return output ~= nil and output:find("Width") ~= nil
   end
   return false
@@ -51,17 +52,25 @@ end
 ---@return boolean
 M.save_image = function(file_path)
   local cmd = M.get_clip_cmd()
-  if not cmd then return false end
+  if not cmd then
+    return false
+  end
 
-  local command
+  local process_cmd = config.get_opt("process_cmd")
+  if process_cmd ~= "" then
+    process_cmd = "| " .. process_cmd .. " "
+  end
+  process_cmd = process_cmd:gsub("%%", "%%%%")
+
+  local command = nil
   if cmd == "xclip" then
-    command = string.format('xclip -selection clipboard -o -t image/png > "%s"', file_path)
+    command = string.format('xclip -selection clipboard -o -t image/png %s> "%s"', process_cmd, file_path)
   elseif cmd == "wl-paste" then
-    command = string.format('wl-paste --type image/png > "%s"', file_path)
+    command = string.format('wl-paste --type image/png %s> "%s"', process_cmd, file_path)
   elseif cmd == "pbctl" then
-    command = string.format('pbctl paste > "%s"', file_path)
+    command = string.format('pbctl paste %s> "%s"', process_cmd, file_path)
   elseif cmd == "pngpaste" then
-    command = string.format('pngpaste - > "%s"', file_path)
+    command = string.format('pngpaste - %s> "%s"', process_cmd, file_path)
   elseif cmd == "powershell.exe" then
     command = string.format(
       "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.Clipboard]::GetImage().Save('%s')",

@@ -52,10 +52,14 @@ end
 ---@return boolean
 M.mkdirp = function(dir)
   local path = vim.fn.resolve(dir)
-  if vim.fn.isdirectory(path) == 1 then return true end
+  if vim.fn.isdirectory(path) == 1 then
+    return true
+  end
 
   local parent = vim.fn.fnamemodify(path, ":h")
-  if not M.mkdirp(parent) then return false end
+  if not M.mkdirp(parent) then
+    return false
+  end
 
   return vim.loop.fs_mkdir(path, 493) -- 0755
 end
@@ -77,7 +81,9 @@ M.get_file_path = function()
   local full_path
   if config.get_opt("prompt_for_file_name") then
     local input = vim.fn.input("File name: ", file_name)
-    if input == "" then return nil end
+    if input == "" then
+      return nil
+    end
     full_path = dir_path .. input
   else
     full_path = dir_path .. file_name

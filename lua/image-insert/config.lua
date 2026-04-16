@@ -8,6 +8,7 @@ local default_config = {
   relative_to_current_file = true,
   prompt_for_file_name = true,
   template = "![$FILE_NAME]($FILE_PATH)",
+  process_cmd = "",
 }
 
 ---@type ImageInsertConfig

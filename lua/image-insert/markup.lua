@@ -11,7 +11,9 @@ M.insert_markup = function(file_path)
   local relative_path = fs.relpath(file_path, current_dir)
 
   local template = config.get_opt("template")
-  if not template then return false end
+  if not template then
+    return false
+  end
 
   local markup = template:gsub("$FILE_NAME", file_name):gsub("$FILE_PATH", relative_path)
   vim.api.nvim_put({ markup }, "c", true, true)

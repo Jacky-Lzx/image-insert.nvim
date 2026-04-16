@@ -12,7 +12,7 @@ end
 
 M.insert_image = function()
   if not clipboard.get_clip_cmd() then
-    util.error("Could not find a clipboard tool. Please install xclip, wl-paste, pbctl, or powershell.")
+    util.error("Could not find a supported clipboard tool.")
     return
   end
 
