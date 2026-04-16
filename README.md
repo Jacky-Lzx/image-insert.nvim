@@ -117,14 +117,33 @@ The plugin can be integrated with [Snacks.nvim picker](https://github.com/folke/
 
 ```lua
 function()
-  Snacks.picker.files {
-    ft = { "jpg", "jpeg", "png", "webp" },
-    confirm = function(self, item, _)
-      self:close()
-      require("image-insert").paste_image({}, "./" .. item.file) -- ./ is necessary for image-insert to recognize it as path
-    end,
-  }
-end
+  Snacks.picker.files({
+    ft = { "jpg", "jpeg", "png", "webp", "heic", "avif" },
+    -- Override what happens when you press <CR> (confirm)
+    actions = {
+      confirm = function(picker, item)
+        -- Get multi-selection (or current item if nothing is selected)
+        local items = picker:selected({ fallback = true })
+        -- Convert items -> file paths
+        local files = vim.tbl_map(function(it)
+          -- for the files picker items typically have it.file (and it.text)
+          return it.file or it.text
+        end, items)
+
+        picker:close()
+
+        -- Schedule if you’re going to open/edit files, etc.
+        vim.schedule(function()
+          vim.notify("Selected:\n" .. table.concat(files, "\n"))
+
+          for _, file in ipairs(files) do
+            require("image-insert").insert_image({ insert_strategy = "insert_line_after" }, file)
+          end
+        end)
+      end,
+    },
+  })
+end,
 ```
 
 The above function should be bound to a keymap, e.g. through lazy.nvim.
@@ -140,9 +159,9 @@ This plugin is inspired by [img-clip.nvim](https://github.com/HakonHarnes/img-cl
 - [x] Implement `process` config to preprocess inserted images
 - [x] Add support for selection from an array of `process` options
 - [x] Support template variables and cursor placement
-- [ ] Support selection of figures from `dir_path`
+- [x] Support selection of figures from `dir_path`
   - [x] Insert image that is selected in Snacks
-  - [ ] Multi-image selection is not supported yet
-  - [ ] Bug: could not enter insert mode when selecting from `dir_path` with a template that includes `$CURSOR`
+  - [x] Support multi-image selection
+  - [x] Bug: could not enter insert mode when selecting from `dir_path` with a template that includes `$CURSOR`
 - [ ] Support multiline templates
 - [ ] Support templates for different filetypes
