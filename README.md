@@ -94,13 +94,40 @@ process = {
 
 ## Usage
 
-Run `:ImageInsert` to insert an image from your clipboard.
+- Run `:ImageInsert` to insert an image from your clipboard.
+- Run `:ImageInsert /path/to/image.png` to insert an existing image.
 
 You can also call the function directly with overrides:
 
 ```lua
-require("image-insert").insert_image({ dir_path = "assets", prompt_for_file_name = false })
+-- Insert from clipboard with custom directory
+require("image-insert").insert_image({ dir_path = "assets" })
+
+-- Insert existing file
+require("image-insert").insert_image({}, "/path/to/image.png")
 ```
+
+### Snacks.nvim
+
+The plugin can be integrated with [Snacks.nvim picker](https://github.com/folke/snacks.nvim) which includes built-in support for previewing media files.
+
+<details> <summary>Example configuration</summary>
+
+```lua
+function()
+  Snacks.picker.files {
+    ft = { "jpg", "jpeg", "png", "webp" },
+    confirm = function(self, item, _)
+      self:close()
+      require("image-insert").paste_image({}, "./" .. item.file) -- ./ is necessary for image-insert to recognize it as path
+    end,
+  }
+end
+```
+
+The above function should be bound to a keymap, e.g. through lazy.nvim.
+
+</details>
 
 ## Acknowledgments
 
@@ -108,6 +135,12 @@ This plugin is inspired by [img-clip.nvim](https://github.com/HakonHarnes/img-cl
 
 ## Milestones
 
-- [x] Implement `process` config to pre-process inserted images
+- [x] Implement `process` config to preprocess inserted images
 - [x] Add support for selection from an array of `process` options
 - [x] Support template variables and cursor placement
+- [ ] Support selection of figures from `dir_path`
+  - [x] Insert image that is selected in Snacks
+  - [ ] Multi-image selection is not supported yet
+  - [ ] Bug: could not enter insert mode when selecting from `dir_path` with a template that includes `$CURSOR`
+- [ ] Support multiline templates
+- [ ] Support templates for different filetypes

@@ -46,7 +46,15 @@ local get_resolved_process = function(opts, callback)
 end
 
 ---@param opts? table
-M.insert_image = function(opts)
+---@param file_path? string
+M.insert_image = function(opts, file_path)
+  if file_path then
+    if not markup.insert_markup(file_path, opts) then
+      util.error("Could not insert markup.")
+    end
+    return
+  end
+
   if not clipboard.get_clip_cmd() then
     util.error("Could not find a supported clipboard tool.")
     return

@@ -76,6 +76,7 @@ M.insert_markup = function(file_path, opts)
       end
 
       vim.api.nvim_win_set_cursor(0, { row, new_col })
+      -- FIX: This command fails when insert a file selected from Snacks. Don't know why. <2026.04.16, lzx>
       vim.cmd("startinsert")
     end
   end
