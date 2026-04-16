@@ -28,7 +28,7 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
     file_name = "%Y-%m-%d-%H-%M-%S",
     relative_to_current_file = true,
     prompt_for_file_name = true,
-    template = "![$FILE_NAME]($FILE_PATH)",
+    template = "![$CURSOR]($FILE_PATH)",
     process = {
       cmd = "",
       extension = "png",
@@ -39,16 +39,34 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
 
 ## Configuration
 
-| Option                     | Default                       | Description                               |
-| -------------------------- | ----------------------------- | ----------------------------------------- |
-| `dir_path`                 | `"img"`                       | Directory to save images.                 |
-| `file_name`                | `"%Y-%m-%d_%H-%M-%S"`         | Format for the file name (timestamp).     |
-| `relative_to_current_file` | `true`                        | Save images relative to the current file. |
-| `prompt_for_file_name`     | `true`                        | Prompt for a file name before saving.     |
-| `template`                 | `"![$FILE_NAME]($FILE_PATH)"` | Markup template to insert.                |
-| `process`                  | (see below)                   | Image processing configuration.           |
+| Option                     | Default                    | Description                               |
+| -------------------------- | -------------------------- | ----------------------------------------- |
+| `dir_path`                 | `"img"`                    | Directory to save images.                 |
+| `file_name`                | `"%Y-%m-%d_%H-%M-%S"`      | Format for the file name (timestamp).     |
+| `relative_to_current_file` | `true`                     | Save images relative to the current file. |
+| `prompt_for_file_name`     | `true`                     | Prompt for a file name before saving.     |
+| `template`                 | `"![$CURSOR]($FILE_PATH)"` | Markup template to insert.                |
+| `process`                  | (see below)                | Image processing configuration.           |
 
-### The `process` Option
+### Templates
+
+Templates use placeholders that are replaced with runtime values.
+
+| Placeholder         | Description                                              | Example                        |
+| ------------------- | -------------------------------------------------------- | ------------------------------ |
+| `$FILE_NAME`        | File name with extension.                                | `image.png`                    |
+| `$FILE_NAME_NO_EXT` | File name without extension.                             | `image`                        |
+| `$FILE_PATH`        | Relative file path.                                      | `img/image.png`                |
+| `$LABEL`            | Lowercase name with dashes.                              | `the-image` (from `The Image`) |
+| `$CURSOR`           | Position of cursor after insertion (enters insert mode). |                                |
+
+Templates can also be defined as a function:
+
+```lua
+template = function(context)
+  return "![" .. context.cursor .. "](" .. context.file_path .. ")"
+end
+```
 
 The `process` option can be a single table or a list of tables. Each table has the following structure:
 
@@ -82,3 +100,4 @@ This plugin is inspired by [img-clip.nvim](https://github.com/HakonHarnes/img-cl
 
 - [x] Implement `process` config to pre-process inserted images
 - [x] Add support for selection from an array of `process` options
+- [x] Support template variables and cursor placement

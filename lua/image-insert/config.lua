@@ -14,8 +14,8 @@ local default_config = {
   relative_to_current_file = true,
   ---@type boolean
   prompt_for_file_name = true,
-  ---@type string
-  template = "![$FILE_NAME]($FILE_PATH)",
+  ---@type string | function
+  template = "![$CURSOR]($FILE_PATH)",
   ---@type ImageInsertProcess | ImageInsertProcess[]
   process = {
     cmd = "",
