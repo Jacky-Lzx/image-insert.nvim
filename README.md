@@ -39,14 +39,24 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
 
 ## Configuration
 
-| Option                     | Default                    | Description                               |
-| -------------------------- | -------------------------- | ----------------------------------------- |
-| `dir_path`                 | `"img"`                    | Directory to save images.                 |
-| `file_name`                | `"%Y-%m-%d_%H-%M-%S"`      | Format for the file name (timestamp).     |
-| `relative_to_current_file` | `true`                     | Save images relative to the current file. |
-| `prompt_for_file_name`     | `true`                     | Prompt for a file name before saving.     |
-| `template`                 | `"![$CURSOR]($FILE_PATH)"` | Markup template to insert.                |
-| `process`                  | (see below)                | Image processing configuration.           |
+| Option                     | Default                       | Description                               |
+| -------------------------- | ----------------------------- | ----------------------------------------- |
+| `dir_path`                 | `"img"`                       | Directory to save images.                 |
+| `file_name`                | `"%Y-%m-%d_%H-%M-%S"`         | Format for the file name (timestamp).     |
+| `relative_to_current_file` | `true`                        | Save images relative to the current file. |
+| `prompt_for_file_name`     | `true`                        | Prompt for a file name before saving.     |
+| `template`                 | `"![$FILE_NAME]($FILE_PATH)"` | Markup template to insert.                |
+| `insert_strategy`          | `"insert_after"`              | Insertion strategy (see below).           |
+| `process`                  | (see below)                   | Image processing configuration.           |
+
+### Insertion Strategies
+
+The `insert_strategy` option determines where the image markup is placed:
+
+- `insert_after`: In the current line, after the cursor.
+- `insert_before`: In the current line, before the cursor.
+- `insert_line_after`: On a new line below the current one.
+- `insert_line_before`: On a new line above the current one.
 
 ### Templates
 

@@ -16,7 +16,10 @@ local default_config = {
   prompt_for_file_name = true,
   ---@type string | function
   template = "![$CURSOR]($FILE_PATH)",
+  ---@type "insert_after" | "insert_before" | "insert_line_after" | "insert_line_before"
+  insert_strategy = "insert_after",
   ---@type ImageInsertProcess | ImageInsertProcess[]
+
   process = {
     cmd = "",
     extension = "png",
