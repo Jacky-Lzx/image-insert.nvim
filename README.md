@@ -19,7 +19,7 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
 
 ```lua
 {
-  "zexili/image-insert.nvim",
+  "Jacky-Lzx/image-insert.nvim",
   keys = {
     { "<leader>ip", "<cmd>ImageInsert<cr>", desc = "Insert image from clipboard" },
   },
@@ -77,6 +77,8 @@ template = function(context)
   return "![" .. context.cursor .. "](" .. context.file_path .. ")"
 end
 ```
+
+### Process
 
 The `process` option can be a single table or a list of tables. Each table has the following structure:
 
