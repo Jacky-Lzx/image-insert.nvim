@@ -77,7 +77,10 @@ M.get_file_path = function(opts)
   dir_path = M.normalize_path(dir_path)
 
   local file_name = os.date(config.get_opt("file_name", opts))
-  local extension = config.get_opt("extension", opts)
+
+  local process = config.get_opt("process", opts)
+  assert(type(process) == "table" or process == nil, "Process option must be a table or nil")
+  local extension = (type(process) == "table" and process.extension) or "png"
 
   local full_path
   if config.get_opt("prompt_for_file_name", opts) then

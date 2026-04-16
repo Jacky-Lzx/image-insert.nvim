@@ -1,14 +1,26 @@
 local M = {}
 
+---@class ImageInsertProcess
+---@field cmd string
+---@field extension string
+
 ---@class ImageInsertConfig
 local default_config = {
+  ---@type string
   dir_path = "img",
+  ---@type string
   file_name = "%Y-%m-%d_%H-%M-%S",
-  extension = "png",
+  ---@type boolean
   relative_to_current_file = true,
+  ---@type boolean
   prompt_for_file_name = true,
+  ---@type string
   template = "![$FILE_NAME]($FILE_PATH)",
-  process_cmd = "",
+  ---@type ImageInsertProcess | ImageInsertProcess[]
+  process = {
+    cmd = "",
+    extension = "png",
+  },
 }
 
 ---@type ImageInsertConfig

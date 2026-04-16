@@ -57,7 +57,12 @@ M.save_image = function(file_path, opts)
     return false
   end
 
-  local process_cmd = config.get_opt("process_cmd", opts)
+  local process = config.get_opt("process", opts)
+  local process_cmd = ""
+  if type(process) == "table" and process.cmd then
+    process_cmd = process.cmd
+  end
+
   if process_cmd ~= "" then
     process_cmd = "| " .. process_cmd .. " "
   end
