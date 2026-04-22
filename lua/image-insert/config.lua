@@ -14,8 +14,33 @@ local default_config = {
   relative_to_current_file = true,
   ---@type boolean
   prompt_for_file_name = true,
-  ---@type string | function
-  template = "![$CURSOR]($FILE_PATH)",
+  ---@type table<string, string | function>
+  template = {
+    markdown = "![$CURSOR]($FILE_PATH)",
+    latex = [[
+      \begin{figure}[ht]
+        \centering
+        \includegraphics[width=0.8\textwidth]{$FILE_PATH}
+        \caption{$CURSOR}
+        \label{fig:$LABEL}
+      \end{figure}
+      ]],
+    tex = [[
+      \begin{figure}[ht]
+        \centering
+        \includegraphics[width=0.8\textwidth]{$FILE_PATH}
+        \caption{$CURSOR}
+        \label{fig:$LABEL}
+      \end{figure}
+      ]],
+    typst = [[
+      #figure(
+        image("$FILE_PATH", width: 80%),
+        caption: [$CURSOR],
+      ) <fig-$LABEL>
+      ]],
+    html = '<img src="$FILE_PATH" alt="$CURSOR" />',
+  },
   ---@type "insert_after" | "insert_before" | "insert_line_after" | "insert_line_before"
   insert_strategy = "insert_after",
   ---@type ImageInsertProcess | ImageInsertProcess[]

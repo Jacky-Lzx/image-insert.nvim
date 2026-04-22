@@ -113,7 +113,32 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
     file_name = "%Y-%m-%d-%H-%M-%S",
     relative_to_current_file = true,
     prompt_for_file_name = true,
-    template = "![$CURSOR]($FILE_PATH)",
+    template = {
+      markdown = "![$CURSOR]($FILE_PATH)",
+      latex = [[
+        \begin{figure}[ht]
+          \centering
+          \includegraphics[width=0.8\textwidth]{$FILE_PATH}
+          \caption{$CURSOR}
+          \label{fig:$LABEL}
+        \end{figure}
+      ]],
+      tex = [[
+        \begin{figure}[ht]
+          \centering
+          \includegraphics[width=0.8\textwidth]{$FILE_PATH}
+          \caption{$CURSOR}
+          \label{fig:$LABEL}
+        \end{figure}
+      ]],
+      typst = [[
+        #figure(
+          image("$FILE_PATH", width: 80%),
+          caption: [$CURSOR],
+        ) <fig-$LABEL>
+      ]],
+      html = '<img src="$FILE_PATH" alt="$CURSOR" />',
+    },
     process = {
       cmd = "",
       extension = "png",
@@ -124,15 +149,15 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
 
 ## Configuration
 
-| Option                     | Default                       | Description                               |
-| -------------------------- | ----------------------------- | ----------------------------------------- |
-| `dir_path`                 | `"img"`                       | Directory to save images.                 |
-| `file_name`                | `"%Y-%m-%d_%H-%M-%S"`         | Format for the file name (timestamp).     |
-| `relative_to_current_file` | `true`                        | Save images relative to the current file. |
-| `prompt_for_file_name`     | `true`                        | Prompt for a file name before saving.     |
-| `template`                 | `"![$FILE_NAME]($FILE_PATH)"` | Markup template to insert.                |
-| `insert_strategy`          | `"insert_after"`              | Insertion strategy (see below).           |
-| `process`                  | (see below)                   | Image processing configuration.           |
+| Option                     | Default               | Description                               |
+| -------------------------- | --------------------- | ----------------------------------------- |
+| `dir_path`                 | `"img"`               | Directory to save images.                 |
+| `file_name`                | `"%Y-%m-%d_%H-%M-%S"` | Format for the file name (timestamp).     |
+| `relative_to_current_file` | `true`                | Save images relative to the current file. |
+| `prompt_for_file_name`     | `true`                | Prompt for a file name before saving.     |
+| `template`                 | (see below)           | Markup template to insert.                |
+| `insert_strategy`          | `"insert_after"`      | Insertion strategy (see below).           |
+| `process`                  | (see below)           | Image processing configuration.           |
 
 ### Insertion Strategies
 
@@ -154,6 +179,44 @@ Templates use placeholders that are replaced with runtime values.
 | `$FILE_PATH`        | Relative file path.                                      | `img/image.png`                |
 | `$LABEL`            | Lowercase name with dashes.                              | `the-image` (from `The Image`) |
 | `$CURSOR`           | Position of cursor after insertion (enters insert mode). |                                |
+
+By default, the template is a table indexed by filetype. The plugin automatically handles indentation and empty lines to
+allow for clean configuration using Lua\'s long brackets (`[[ ... ]]`):
+
+- The indentation of the first contentful line is treated as the base indentation and is removed from all lines.
+- Leading empty lines and trailing whitespace-only lines (common when using long brackets) are automatically stripped.
+- A single trailing newline is stripped if present.
+
+```lua
+template = {
+  markdown = "![$CURSOR]($FILE_PATH)",
+  latex = [[
+    \begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.8\textwidth]{$FILE_PATH}
+      \caption{$CURSOR}
+      \label{fig:$LABEL}
+    \end{figure}
+  ]],
+  tex = [[
+    \begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.8\textwidth]{$FILE_PATH}
+      \caption{$CURSOR}
+      \label{fig:$LABEL}
+    \end{figure}
+  ]],
+  typst = [[
+    #figure(
+      image("$FILE_PATH", width: 80%),
+      caption: [$CURSOR],
+    ) <fig-$LABEL>
+  ]],
+  html = '<img src="$FILE_PATH" alt="$CURSOR" />',
+}
+```
+
+The plugin selects the template based on the current buffer\'s `filetype`. If no specific template is found, it falls back to `markdown`.
 
 Templates can also be defined as a function:
 
@@ -248,5 +311,5 @@ This plugin is inspired by [img-clip.nvim](https://github.com/HakonHarnes/img-cl
   - [x] Insert image that is selected in Snacks
   - [x] Support multi-image selection
   - [x] Bug: could not enter insert mode when selecting from `dir_path` with a template that includes `$CURSOR`
-- [ ] Support multiline templates
-- [ ] Support templates for different filetypes
+- [x] Support multiline templates
+- [x] Support templates for different filetypes
