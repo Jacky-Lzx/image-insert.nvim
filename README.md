@@ -4,6 +4,86 @@ A Neovim plugin to insert images directly from your clipboard into your buffer (
 
 https://github.com/user-attachments/assets/f2ed1b85-3fab-4ccd-b9f9-0a877fc19a70
 
+<details> <summary> Keymappings in the demo </summary>
+
+```lua
+ keys = {
+  {
+    "<leader>pI",
+    function()
+      require("image-insert").insert_image({ insert_strategy = "insert_line_after" })
+    end,
+    desc = "[image-insert] Insert next line",
+  },
+  {
+    "<leader>pi",
+    function()
+      require("image-insert").insert_image({ insert_strategy = "insert_after" })
+    end,
+    desc = "[image-insert] Insert after cursor",
+  },
+  {
+    "<leader>PI",
+    function()
+      require("image-insert").insert_image({ insert_strategy = "insert_line_before" })
+    end,
+    desc = "[image-insert] Insert prev line",
+  },
+  {
+    "<leader>Pi",
+    function()
+      require("image-insert").insert_image({ insert_strategy = "insert_before" })
+    end,
+    desc = "[image-insert] Insert before cursor",
+  },
+  {
+    "<leader>pC",
+    function()
+      require("image-insert").insert_image({
+        process = {
+          { cmd = "", extension = "png" },
+          { cmd = "", extension = "jpeg" },
+          { cmd = "", extension = "avif" },
+          { cmd = "convert - avif:-", extension = "avif" },
+          { cmd = "magick - -quality 85 png:-", extension = "png" },
+          { cmd = "magick - -quality 75 webp:-", extension = "webp" },
+        },
+      })
+    end,
+    desc = "[image-insert] Paste image from system clipboard",
+  },
+  {
+    "<leader>pc",
+    function()
+      Snacks.picker.files({
+        ft = { "jpg", "jpeg", "png", "webp", "heic", "avif" },
+        actions = {
+          confirm = function(picker, _)
+            local items = picker:selected({ fallback = true })
+            local files = vim.tbl_map(function(it)
+              return it.file or it.text
+            end, items)
+
+            picker:close()
+
+            vim.schedule(function()
+              Snacks.notify("Selected:\n" .. table.concat(files, "\n"), { title = "image-insert.nvim" })
+
+              for _, file in ipairs(files) do
+                require("image-insert").insert_image({ insert_strategy = "insert_line_after" }, file)
+              end
+            end)
+          end,
+        },
+      })
+    end,
+    desc = "[image-insert] Choose an image to paste",
+  },
+},
+```
+
+</details>
+
 ## Features
 
 - Insert images from clipboard with a single command.
@@ -14,6 +94,9 @@ https://github.com/user-attachments/assets/f2ed1b85-3fab-4ccd-b9f9-0a877fc19a70
 - Markdown image syntax by default.
 - Automatically calculates relative paths.
 - Configuration can be overridden per call.
+
+> [!NOTE]
+> The plugin is only tested on MacOS, contributions to ensure compatibility with other platforms are welcome.
 
 ## Installation
 
