@@ -313,3 +313,5 @@ This plugin is inspired by [img-clip.nvim](https://github.com/HakonHarnes/img-cl
   - [x] Bug: could not enter insert mode when selecting from `dir_path` with a template that includes `$CURSOR`
 - [x] Support multiline templates
 - [x] Support templates for different filetypes
+- [ ] Support drag-and-paste
+- [ ] Support image insertion over SSH connection
