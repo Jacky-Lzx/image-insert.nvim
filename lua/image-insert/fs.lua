@@ -84,9 +84,10 @@ M.get_file_path = function(opts)
 
   local full_path
   if config.get_opt("prompt_for_file_name", opts) then
-    local input = vim.fn.input("File name: ", file_name)
-    if input == "" then
-      return nil
+    local default_text = ""
+    local input = vim.fn.input("File name: ", default_text)
+    if input == "" or input == default_text then
+      input = file_name
     end
     full_path = dir_path .. input
   else
