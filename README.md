@@ -149,15 +149,16 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
 
 ## Configuration
 
-| Option                     | Default               | Description                               |
-| -------------------------- | --------------------- | ----------------------------------------- |
-| `dir_path`                 | `"img"`               | Directory to save images.                 |
-| `file_name`                | `"%Y-%m-%d_%H-%M-%S"` | Format for the file name (timestamp).     |
-| `relative_to_current_file` | `true`                | Save images relative to the current file. |
-| `prompt_for_file_name`     | `true`                | Prompt for a file name before saving.     |
-| `template`                 | (see below)           | Markup template to insert.                |
-| `insert_strategy`          | `"insert_after"`      | Insertion strategy (see below).           |
-| `process`                  | (see below)           | Image processing configuration.           |
+| Option                     | Default               | Description                                                                |
+| -------------------------- | --------------------- | -------------------------------------------------------------------------- |
+| `dir_path`                 | `"img"`               | Directory to save images.                                                  |
+| `file_name`                | `"%Y-%m-%d_%H-%M-%S"` | Format for the file name (timestamp).                                      |
+| `relative_to_current_file` | `true`                | Save images relative to the current file.                                  |
+| `insert_relative_to`       | `"file"`              | Insert path relative to `"file"` or `"project"`.                           |
+| `prompt_for_file_name`     | `true`                | Prompt for a file name before saving. If empty, falls back to `file_name`. |
+| `template`                 | (see below)           | Markup template to insert.                                                 |
+| `insert_strategy`          | `"insert_after"`      | Insertion strategy (see below).                                            |
+| `process`                  | (see below)           | Image processing configuration.                                            |
 
 ### Insertion Strategies
 

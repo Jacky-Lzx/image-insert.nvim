@@ -9,8 +9,16 @@ local M = {}
 M.insert_markup = function(file_path, opts)
   local file_name = vim.fn.fnamemodify(file_path, ":t")
   local file_name_no_ext = vim.fn.fnamemodify(file_path, ":t:r")
-  local current_dir = vim.fn.expand("%:p:h")
-  local relative_path = fs.relpath(file_path, current_dir)
+
+  local insert_relative_to = config.get_opt("insert_relative_to", opts)
+  local start_dir
+  if insert_relative_to == "project" then
+    start_dir = vim.fn.getcwd()
+  else
+    start_dir = vim.fn.expand("%:p:h")
+  end
+
+  local relative_path = fs.relpath(file_path, start_dir)
 
   local label = file_name_no_ext:lower():gsub("%s+", "-")
 

@@ -12,6 +12,8 @@ local default_config = {
   file_name = "%Y-%m-%d_%H-%M-%S",
   ---@type boolean
   relative_to_current_file = true,
+  ---@type "file" | "project"
+  insert_relative_to = "file",
   ---@type boolean
   prompt_for_file_name = true,
   ---@type table<string, string | function>
