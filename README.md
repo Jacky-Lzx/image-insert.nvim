@@ -1,5 +1,9 @@
 # image-insert.nvim
 
+> [!WARNING]
+>
+> This plugin is no longer maintained. Use the [image-tools.nvim](https://github.com/Jacky-Lzx/image-tools.nvim) plugin as a more powerful replacement
+
 A Neovim plugin to insert images directly from your clipboard into your buffer (e.g., Markdown).
 
 https://github.com/user-attachments/assets/f2ed1b85-3fab-4ccd-b9f9-0a877fc19a70
